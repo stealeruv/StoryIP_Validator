@@ -66,7 +66,7 @@ source $HOME/.bash_profile
 story version
 ```
 
-## Init Iliad node
+## Initiate Iliad node
 
 Replace "Your_moniker_name" with any name you want 
 (Ex: story init --network iliad --moniker cryptoconsole)
@@ -121,13 +121,13 @@ sudo systemctl enable story-geth && \
 sudo systemctl status story-geth
 ```
 
-## Check logs
+# Check logs
 
-# Geth logs
+### Geth logs
 ```
 sudo journalctl -u story-geth -f -o cat
 ```
-# Story logs
+### Story logs
 ```
 sudo journalctl -u story -f -o cat
 ```
@@ -137,7 +137,7 @@ sudo journalctl -u story -f -o cat
 curl localhost:26657/status | jq
 ```
 
-## Register your Validator
+# Register your Validator
 
 ### 1. Export wallet:
 ```
@@ -156,10 +156,18 @@ Get the wallet address for faucet
 Get it from faucet : https://faucet.story.foundation/
 
 ### 5. Validator registering
-   
+
+Replace "your_private_key" with your key from the step2
+
 ```
 story validator create --stake 1000000000000000000 --private-key "your_private_key"
 ```
+
+### 6. check your validator
+
+Explorer: https://testnet.story.explorers.guru/
+
+
 
 ## BACK UP FILE
 
@@ -173,4 +181,4 @@ sudo nano ~/.story/story/config/private_key.txt
 sudo nano ~/.story/story/config/priv_validator_key.json
 ```
 
-Follow our TG : https://t.me/cryptoconsol
+Join our TG : https://t.me/cryptoconsol
