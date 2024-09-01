@@ -75,6 +75,14 @@ Replace "Your_moniker_name" with any name you want
 ```
 story init --network iliad --moniker "Your_moniker_name"
 ```
+### Edit Peers
+```
+cd && nano /root/.story/story/config/config.toml
+```
+Replace peers with
+```
+persistent_peers= "f16c644a6d19798e482edcfe5bd5728a22aa5e0d@65.108.103.184:26656,9fc21eaa5f39f3611875a951775c5b1ebdf032ee@84.32.186.154:26656,a320f8a15892bddd7b5502527e0d11c5b5b9d0e3@69.67.150.107:29931,537b4c11a17f282bd9f84ba578e5998944c49c79@176.9.155.156:28656"
+```
 
 ## Create story-geth service file
 ```
