@@ -227,6 +227,12 @@ Get the wallet address for faucet
 
 Get it from faucet : https://faucet.story.foundation/
 
+Check the sync, the catching up must be 'false'
+```
+curl -s localhost:26657/status | jq
+```
+Stake only after "catching_up": false
+
 ### 5. Validator registering
 
 Replace "your_private_key" with your key from the step2
