@@ -125,8 +125,10 @@ EOF
 ## Reload and start story-geth
 ```
 sudo systemctl daemon-reload && \
-sudo systemctl start story-geth && \
 sudo systemctl enable story-geth && \
+sudo systemctl enable story && \
+sudo systemctl start story-geth && \
+sudo systemctl start story && \
 sudo systemctl status story-geth
 ```
 
