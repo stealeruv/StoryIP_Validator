@@ -239,6 +239,10 @@ story validator create --stake 1000000000000000000 --private-key "your_private_k
 
 Explorer: https://testnet.story.explorers.guru/
 
+### 7. Check your validator INFO
+```
+curl -s localhost:26657/status | jq -r '.result.validator_info' 
+```
 
 
 ## BACK UP FILE
