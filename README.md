@@ -75,13 +75,17 @@ Replace "Your_moniker_name" with any name you want
 ```
 story init --network iliad --moniker "Your_moniker_name"
 ```
-### Edit Peers
+### Peers setup
 ```
-cd && nano /root/.story/story/config/config.toml
-```
-Replace peers with
-```
-persistent_peers= "f16c644a6d19798e482edcfe5bd5728a22aa5e0d@65.108.103.184:26656,9fc21eaa5f39f3611875a951775c5b1ebdf032ee@84.32.186.154:26656,a320f8a15892bddd7b5502527e0d11c5b5b9d0e3@69.67.150.107:29931,537b4c11a17f282bd9f84ba578e5998944c49c79@176.9.155.156:28656"
+PEERS=$(curl -s -X POST https://rpc-story.josephtran.xyz -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"net_info","params":[],"id":1}' | jq -r '.result.peers[] | select(.connection_status.SendMonitor.Active == true) | "\(.node_info.id)@\(if .node_info.listen_addr | contains("0.0.0.0") then .remote_ip + ":" + (.node_info.listen_addr | sub("tcp://0.0.0.0:"; "")) else .node_info.listen_addr | sub("tcp://"; "") end)"' | tr '\n' ',' | sed 's/,$//' | awk '{print "\"" $0 "\""}')
+
+sed -i "s/^persistent_peers *=.*/persistent_peers = $PEERS/" "$HOME/.story/story/config/config.toml"
+
+if [ $? -eq 0 ]; then
+    echo -e "Configuration file updated successfully with new peers"
+else
+    echo "Failed to update configuration file."
+fi
 ```
 
 ## Create story-geth service file
@@ -241,15 +245,14 @@ Replace "your_private_key" with your key from the step2
 story validator create --stake 1000000000000000000 --private-key "your_private_key"
 ```
 
-### 6. check your validator
-
-Explorer: https://testnet.story.explorers.guru/
-
-### 7. Check your validator INFO
+### 6. Check your validator INFO
 ```
 curl -s localhost:26657/status | jq -r '.result.validator_info' 
 ```
 
+### 7. check your validator
+
+Explorer: https://testnet.story.explorers.guru/
 
 ## BACK UP FILE
 
