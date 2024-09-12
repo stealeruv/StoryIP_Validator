@@ -213,7 +213,6 @@ sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
 lz4 -d Geth_snapshot.lz4 | pv | sudo tar xv -C /root/.story/geth/iliad/geth/
 
 mv $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
-Restart node 
 
 sudo systemctl start story
 sudo systemctl start story-geth
