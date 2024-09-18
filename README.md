@@ -147,77 +147,58 @@ curl localhost:26657/status | jq
 
 # SYNC using snapshot File
 
-C2 Mandragora and Joseph Tran
+## Credits to Joseph Tran
 
-Choose Either one of the snapshot file
-
-```
-sudo apt-get install wget lz4 -y
-
-wget -O geth_snapshot.lz4 https://snapshots.mandragora.io/geth_snapshot.lz4
-wget -O story_snapshot.lz4 https://snapshots.mandragora.io/story_snapshot.lz4
-
-sudo systemctl stop story-geth
-sudo systemctl stop story
-
-sudo cp $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
-
-sudo rm -rf $HOME/.story/geth/iliad/geth/chaindata
-sudo rm -rf $HOME/.story/story/data
-
-lz4 -c -d geth_snapshot.lz4 | tar -x -C $HOME/.story/geth/iliad/geth
-lz4 -c -d story_snapshot.lz4 | tar -x -C $HOME/.story/story
-
-sudo rm -v geth_snapshot.lz4
-sudo rm -v story_snapshot.lz4
-
-sudo cp $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
-
-sudo systemctl start story-geth
-sudo systemctl start story
-```
-or
+### Install tool
 ```
 sudo apt-get install wget lz4 aria2 pv -y
-
+```
+### Stop node
+```
 sudo systemctl stop story
 sudo systemctl stop story-geth
-
-cd $HOME
-rm -f Geth_snapshot.lz4
-if curl -s --head https://vps7.josephtran.xyz/Story/Geth_snapshot.lz4 | head -n 1 | grep "200" > /dev/null; then
-    echo "Snapshot found, downloading..."
-    aria2c -x 16 -s 16 https://vps7.josephtran.xyz/Story/Geth_snapshot.lz4 -o Geth_snapshot.lz4
-else
-    echo "No snapshot found."
-fi
-
+```
+### Download Story-data
+```
 cd $HOME
 rm -f Story_snapshot.lz4
-if curl -s --head https://vps7.josephtran.xyz/Story/Story_snapshot.lz4 | head -n 1 | grep "200" > /dev/null; then
-    echo "Snapshot found, downloading..."
-    aria2c -x 16 -s 16 https://vps7.josephtran.xyz/Story/Story_snapshot.lz4 -o Story_snapshot.lz4
-else
-    echo "No snapshot found."
-fi
-
-mv $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
-
+wget --show-progress https://josephtran.co/story/Story_snapshot.lz4
+```
+### Download Geth-data
+```
+cd $HOME
+rm -f Geth_snapshot.lz4
+wget --show-progress https://josephtran.co/story/Geth_snapshot.lz4
+```
+### Backup priv_validator_state.json:
+```
+mv ~/.story/story/data/priv_validator_state.json ~/.story/priv_validator_state.json.backup
+```
+### Remove old data
+```
 rm -rf ~/.story/story/data
 rm -rf ~/.story/geth/iliad/geth/chaindata
-
+```
+### Extract Story-data
+```
 sudo mkdir -p /root/.story/story/data
 lz4 -d Story_snapshot.lz4 | pv | sudo tar xv -C /root/.story/story/
-
+```
+### Extract Geth-data
+```
 sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
 lz4 -d Geth_snapshot.lz4 | pv | sudo tar xv -C /root/.story/geth/iliad/geth/
-
-mv $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
-
+```
+### Move priv_validator_state.json back
+```
+mv ~/.story/priv_validator_state.json.backup ~/.story/story/data/priv_validator_state.json
+```
+### Restart node
+```
 sudo systemctl start story
 sudo systemctl start story-geth
-
 ```
+
 
 # Register your Validator
 
