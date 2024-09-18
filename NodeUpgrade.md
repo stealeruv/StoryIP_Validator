@@ -29,36 +29,53 @@ sudo systemctl start story && sudo systemctl status story
 
 # Snapshot
 
-Credits to Mandragora's infrastructure services
+## Credits to Joseph Tran
+### Install tool
 ```
-sudo apt-get install wget lz4 -y
-
-sudo systemctl stop story-geth
+sudo apt-get install wget lz4 aria2 pv -y
+```
+### Stop node
+```
 sudo systemctl stop story
+sudo systemctl stop story-geth
 ```
+### Download Story-data
 ```
-sudo cp $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
+cd $HOME
+rm -f Story_snapshot.lz4
+wget --show-progress https://josephtran.co/story/Story_snapshot.lz4
 ```
+### Download Geth-data
 ```
-sudo rm -rf $HOME/.story/geth/iliad/geth/chaindata
-sudo rm -rf $HOME/.story/story/data
+cd $HOME
+rm -f Geth_snapshot.lz4
+wget --show-progress https://josephtran.co/story/Geth_snapshot.lz4
 ```
+### Backup priv_validator_state.json:
 ```
-wget -O geth_snapshot.lz4 https://snapshots.mandragora.io/geth_snapshot.lz4
-wget -O story_snapshot.lz4 https://snapshots.mandragora.io/story_snapshot.lz4
+mv ~/.story/story/data/priv_validator_state.json ~/.story/priv_validator_state.json.backup
 ```
+### Remove old data
 ```
-lz4 -c -d geth_snapshot.lz4 | tar -x -C $HOME/.story/geth/iliad/geth
-lz4 -c -d story_snapshot.lz4 | tar -x -C $HOME/.story/story
+rm -rf ~/.story/story/data
+rm -rf ~/.story/geth/iliad/geth/chaindata
 ```
+### Extract Story-data
 ```
-sudo rm -v geth_snapshot.lz4
-sudo rm -v story_snapshot.lz4
+sudo mkdir -p /root/.story/story/data
+lz4 -d Story_snapshot.lz4 | pv | sudo tar xv -C /root/.story/story/
 ```
+### Extract Geth-data
 ```
-sudo cp $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
+sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
+lz4 -d Geth_snapshot.lz4 | pv | sudo tar xv -C /root/.story/geth/iliad/geth/
 ```
+### Move priv_validator_state.json back
 ```
-sudo systemctl start story-geth
+mv ~/.story/priv_validator_state.json.backup ~/.story/story/data/priv_validator_state.json
+```
+### Restart node
+```
 sudo systemctl start story
+sudo systemctl start story-geth
 ```
