@@ -9,7 +9,7 @@ wget https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-l
 tar -xzvf story-linux-amd64-0.10.0-9603826.tar.gz
 ```
 
-###Stop node
+### Stop node
 ```
 sudo systemctl stop story
 ```
